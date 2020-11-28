@@ -1,3 +1,4 @@
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -12,19 +13,25 @@ import {
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dtos/create-coffee.dto';
 import { UpdateCoffeeDto } from './dtos/update-coffee.dto';
-import { PaginationQueryDto } from './dtos/pagination-query.dto';
+import { PaginationQueryDto } from '../common/dtos/pagination-query.dto';
+import { Public } from '../common/decorators/public.decorator';
+import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @Public()
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     return this.coffeesService.findAll(paginationQuery);
   }
 
+  @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.coffeesService.findOne(id);
   }
 

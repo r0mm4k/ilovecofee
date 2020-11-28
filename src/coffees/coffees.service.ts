@@ -6,7 +6,7 @@ import { Coffee } from './entities/coffee.entity';
 import { Flavor } from './entities/flavor.entity';
 import { CreateCoffeeDto } from './dtos/create-coffee.dto';
 import { UpdateCoffeeDto } from './dtos/update-coffee.dto';
-import { PaginationQueryDto } from './dtos/pagination-query.dto';
+import { PaginationQueryDto } from '../common/dtos/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class CoffeesService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const coffee = await this.coffeeRepository.findOne(id, {
       relations: ['flavors'],
     });
